@@ -1,0 +1,17 @@
+1-El RequestAnalizer es un RequestHandler
+
+2-Hacer un RequestHandler que reciba parámetros por consola. Variable de Entorno:  TERMINAL_QUERY_STRING.
+	./application.exe "solver_name=trapezoid&function_name=quadratic&intervals=100&x0=-2&x1=2&a=1&b=2&c=0"
+
+3-Algún mecanismo de seguridad para determinar que el argumento 1 es una QUERY_STRING. Probar regex_match
+	http://www.cplusplus.com/reference/regex/regex_match/
+	http://www.cplusplus.com/reference/regex/
+	http://www.cplusplus.com/reference/regex/ECMAScript/
+
+4-Camelcase para todos y todas.
+
+5-Corrección del WARNING:
+	./lib/httprequesthandler/libhttprequesthandler.cpp: In member function ‘std::string HttpRequestHandler::m_decode(std::string&)’:
+	./lib/httprequesthandler/libhttprequesthandler.cpp:54:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (i=0; i<input.length(); i++)
+                ^

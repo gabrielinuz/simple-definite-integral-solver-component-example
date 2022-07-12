@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<link rel="icon" href="./favicon.ico" type="image/x-icon">
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+<title>Simple Definite Integral Solver</title>
+
+<!-- ####################################################################################################### -->
+<!--CSS STYLE-->
+<style type='text/css'>
+    body 
+    {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        text-align: center;
+    }
+    #wrapper
+    {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        margin: auto;
+        text-align: left;
+    }
+    #header h1 
+    {
+        font-family: Verdana, Geneva, sans-serif;
+    }
+    #menu 
+    {
+        width: 100%;
+        height: 25px;
+        padding-top: 5px;
+    }
+    #menu ul
+    {
+        list-style-type: none;
+        width: 100%;
+        margin-top: 1px;
+        margin-right: auto;
+        margin-bottom: auto;
+        margin-left: -38px;
+    }
+    #menu li 
+    {
+        padding: 0px;
+        float:left;
+        margin: 1px
+    }
+    #menu a
+    {
+        background-color:#ccc;
+        padding: 5px;
+    }
+    #menu a:hover
+    {  
+        background-color:#eee;
+        padding: 5px;
+    }
+    #col-conten 
+    {
+        width: 59%;
+        max-width: 600px;
+        border: 1px dashed #ccc;
+        float: left;
+        margin-bottom: 5px;
+    }
+    #columns 
+    {
+        float: right;
+        width: 39%;
+        border: 1px dashed #ccc;
+        padding-bottom: 3px;
+    }
+    .colum1 
+    {
+        float:left;
+        width: 49%;
+        border: 1px dotted #CCC;
+    }
+    .colum2 
+    {
+        float: right;
+        width: 49%; 
+        border: 1px dotted #CCC;
+    }
+
+    @media screen and (max-width: 769px) 
+    {
+        #col-conten 
+        {
+            width: 100%;
+            max-width: 100%;
+            border: 1px dashed #ccc;
+        }
+        #columns 
+        {
+            width: 100%;
+            border: 1px dashed #ccc;
+            padding-bottom: 3px;
+        }
+        .colum1 
+        {
+            float:left;
+            width: 49%;
+            border: 1px dotted #CCC;
+        }
+        .colum2 
+        {
+            float: right;
+            width: 49%; 
+            border: 1px dotted #CCC;
+        }
+    }
+
+    @media screen and (max-width: 481px) 
+    {
+        #menu li 
+        {
+            float:left;
+            width: 96%;
+            padding: 0px;
+        }
+        #menu a
+        {
+            float:left;
+            background-color:#ccc;
+            width: 100%;
+            padding: 5px;
+        }
+        #menu a:hover
+        {  
+            background-color:#eee;
+            width: 100%;
+            padding: 5px;
+        }
+        .colum1 
+        {
+            width: 100%;
+            border: 1px dotted #CCC;
+        }
+        .colum2 
+        {
+            width: 100%;    
+            border: 1px dotted #CCC;
+        }
+    }
+</style>
+<!--CSS STYLE-->
+<!-- ####################################################################################################### -->
+
+</head>
+
+<body>
+    <div id='wrapper'>
+        <div id='header'> 
+            <h1>Simple Definite Integral Solver</h1>
+        </div>
+
+        <h3>Educational software for the subject Mathematical Analysis 2</h3>
+        
+        <hr />    
+        
+        <h3>Select solver type and function</h3>
+        <hr />
+        <form name="form1">
+            <label>Select Method</label><br>
+            <input type='radio' name='solver' value='trapezoid' checked> Trapezoid
+            <br>
+            <input type='radio' name='solver' value='simpson'> Simpson            
+            <br><br>
+
+            <label>Select Function</label><br>
+            <input type='radio' name='function' value='potential'> Potential
+            <br>
+            <input type='radio' name='function' value='quadratic' checked> Quadratic            
+            <br>
+            <input type='radio' name='function' value='sinusoidal'> Sinusoidal
+
+            <br><br>
+
+            <label>Intervals:</label><br>
+            <input type='number' name='intervals' min='1' value='100'>
+
+            <br><br>
+
+            <label>X0 limit &lsaquo; &#8477; values &rsaquo;:</label><br>
+            <input type='number' name='x0'>
+
+            <br><br>
+
+            <label>X1 limit &lsaquo; &#8477; values &rsaquo;:</label><br>
+            <input type='number' name='x1'>
+
+            <br><br>
+
+            <input type='button' value='Set' onClick='setMethodAndFunction();'>
+        </form>          
+        
+        <h3>Equation:</h3>
+        <hr />
+        <div id='equation'></div>
+    </div>
+
+<!-- ####################################################################################################### -->
+
+<!--JAVASCRIPT FUNCTIONS-->
+    <script type="text/javascript" language="javascript">
+        var params = '';
+
+        function setMethodAndFunction()
+        {
+            var solver = document.getElementsByName('solver');
+            var func = document.getElementsByName('function');
+            var intervals = document.form1.intervals.value;
+            var x0 = document.form1.x0.value;
+            var x1 = document.form1.x1.value;
+
+            for(i=0;i<solver.length;i++) 
+            if (solver[i].checked) 
+            { 
+                checkedSolver = solver[i].value; 
+            }     
+
+            for(i=0;i<func.length;i++) 
+            if (func[i].checked) 
+            { 
+                checkedFunction = func[i].value; 
+            } 
+
+            //voy cargando parámetros:
+            params = 'solver_name='+checkedSolver+'&function_name='+checkedFunction+'&intervals='+intervals;
+            params += '&x0='+x0+'&x1='+x1;
+
+            var equation = document.getElementById('equation');
+
+            switch(checkedFunction)
+            {
+                case 'potential':
+                    var html = '<form id="equation-form" name="potential">&int; a <input name="a" type="number"> * X ^ n <input name="n" type="number"> ';
+                    html += '<input type="button" value="="';
+                    html += 'onClick="potentialParams(); this.disabled=true;">';
+                    html += '</form>';
+                    equation.innerHTML = html;
+                    break;
+                case 'quadratic':
+                    var html = '<form id="equation-form" name="quadratic">&int; a <input id="a" type="number"> * X ^ 2 ';
+                    html += '+ b <input id="b" type="number"> ';
+                    html += '+ c <input id="c" type="number"> ';
+                    html += '<input type="button" value="=" onClick="quadraticParams();  this.disabled=true;"></form>';
+                    equation.innerHTML = html;
+                    break;
+                case 'sinusoidal':
+                    var html = '<form id="equation-form" name="sinusoidal">&int; a <input id="a" type="number"> * sen k <input id="k" type="number"> * X ';
+                    html += '<input type="button" value="=" onClick="sinusoidalParams();  this.disabled=true;"></form>';
+                    equation.innerHTML = html;
+                    break;
+                default:                   
+                    equation.innerHTML = 'None';
+            }
+        }
+
+        function potentialParams()
+        {
+            params+="&a="+document.potential.a.value+"&n="+document.potential.n.value; 
+            sendData();
+        }
+
+        function quadraticParams()
+        {
+            params+="&a="+document.quadratic.a.value+"&b="+document.quadratic.b.value+"&c="+document.quadratic.c.value; 
+            sendData();
+        }
+
+        function sinusoidalParams()
+        {
+            params+="&a="+document.sinusoidal.a.value+"&k="+document.sinusoidal.k.value; 
+            sendData()
+        }
+
+        var sendData = function senData()
+        {
+            // Definimos la URL que vamos a solicitar via Ajax
+            var ajax_url = "application.exe";
+
+            // Definirmos los parámetros que vamos a enviar con la estructura:
+            // "parametro=valor&otro_parametro=otro_valor";
+
+            // Añadimos los parámetros a la URL
+            ajax_url += '?' + params;
+
+            // Creamos un nuevo objeto encargado de la comunicación
+            var ajax_request = new XMLHttpRequest();
+
+
+            // Definimos una función a ejecutar cuándo la solicitud Ajax tiene alguna información
+            ajax_request.onreadystatechange = function() 
+            {
+                // readyState es 4
+                if (ajax_request.readyState == 4 ) 
+                {
+                    // Analizamos el responseText que contendrá el JSON enviado desde el servidor
+                    var response = JSON.parse( ajax_request.responseText );
+
+                    //creamos un texnode y lo agregamos al sector del resultado en la ecuación
+                    var textnode = document.createTextNode(" "+response.result);
+                    document.getElementById("equation-form").appendChild(textnode);                 
+                }
+            }
+
+            // Definimos como queremos realizar la comunicación
+            ajax_request.open( "GET", ajax_url, true );
+
+            //Enviamos la solicitud
+            ajax_request.send();
+
+        }
+
+    </script> 
+<!--JAVASCRIPT FUNCTIONS-->
+<!-- ####################################################################################################### -->
+
+</body>
+</html>
